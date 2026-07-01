@@ -1,0 +1,171 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sentinel-ai-core"
+version = "0.1.0"
+description = "Security Evaluation and Neural Tracing for Intelligent Language-models"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+    { name = "Hamza Masmoudi", email = "hamza.masmoudi.ai@gmail.com" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.2.0",
+    "structlog>=24.1.0",
+    "rich>=13.7.0",
+    "typing-extensions>=4.10.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/hamza2masmoudi/SENTINEL"
+Repository = "https://github.com/hamza2masmoudi/SENTINEL"
+Issues = "https://github.com/hamza2masmoudi/SENTINEL/issues"
+Changelog = "https://github.com/hamza2masmoudi/SENTINEL/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/hamza2masmoudi/SENTINEL/tree/main/docs"
+
+[project.optional-dependencies]
+detection = [
+    "scikit-learn>=1.4.0",
+    "sentence-transformers>=2.5.0",
+    "transformers>=4.38.0",
+    "presidio-analyzer>=2.2.353",
+    "presidio-anonymizer>=2.2.353",
+    "spacy>=3.7.0",
+    "litellm>=1.30.0",
+]
+monitoring = [
+    "opentelemetry-api>=1.24.0",
+    "opentelemetry-sdk>=1.24.0",
+    "opentelemetry-exporter-otlp>=1.24.0",
+    "prometheus-client>=0.20.0",
+]
+governance = [
+    "sqlalchemy>=2.0.0",
+    "aiosqlite>=0.20.0",
+    "psycopg[binary]>=3.1.0",
+    "pyyaml>=6.0.1",
+    "cryptography>=42.0.0",
+]
+api = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.28.0",
+    "slowapi>=0.1.9",
+    "httpx>=0.27.0",
+]
+cli = [
+    "typer>=0.12.0",
+]
+ui = [
+    "streamlit>=1.32.0",
+]
+all = [
+    "sentinel-ai-core[detection,monitoring,governance,api,cli,ui]",
+]
+
+dev = [
+    "pytest>=8.1.0",
+    "pytest-cov>=5.0.0",
+    "pytest-asyncio>=0.23.0",
+    "mypy>=1.9.0",
+    "ruff>=0.3.0",
+    "black>=24.3.0",
+    "radon>=6.0.1",
+    "httpx>=0.27.0",
+    "types-pyyaml>=6.0.12.20240311",
+    "bandit>=1.7.8",
+    "safety>=3.2.0",
+    "mkdocs>=1.5.3",
+    "mkdocs-material>=9.5.0",
+]
+
+[project.scripts]
+sentinel = "sentinel.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sentinel"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+    "N",
+    "UP",
+    "B",
+    "C4",
+    "SIM",
+]
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["sentinel"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "sklearn.*",
+    "sentence_transformers.*",
+    "transformers.*",
+    "torch.*",
+]
+ignore_missing_imports = true
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["sentinel"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "benchmarks"]
+skips = ["B104", "B105", "B110", "B112"]
