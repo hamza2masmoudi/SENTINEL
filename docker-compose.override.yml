@@ -1,0 +1,12 @@
+services:
+  sentinel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["serve", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./src/sentinel:/app/src/sentinel:ro
+    environment:
+      - SENTINEL_ENVIRONMENT=development
+      - SENTINEL_LOG_LEVEL=DEBUG
+      - SENTINEL_LOG_FORMAT=console
