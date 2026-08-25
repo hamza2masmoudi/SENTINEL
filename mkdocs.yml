@@ -1,0 +1,20 @@
+site_name: SENTINEL
+site_description: Security Evaluation and Neural Tracing for Intelligent Language-models
+site_author: Hamza Masmoudi
+repo_url: https://github.com/hamza2masmoudi/SENTINEL
+repo_name: hamza2masmoudi/SENTINEL
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+
+nav:
+  - Overview: index.md
+  - Architecture Decision Records:
+      - Project Structure: adr/0001-project-structure-and-foundations.md
