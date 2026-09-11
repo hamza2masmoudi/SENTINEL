@@ -224,6 +224,11 @@ class PromptInjectionDetector(BaseDetector):
             return min(0.35, hits * 0.12)
         return 0.0
 
+    @property
+    def threshold(self) -> float:
+        """Return the active detection threshold."""
+        return self._threshold
+
     async def detect(
         self, text: str, context: dict[str, Any] | None = None
     ) -> DetectionResult:
