@@ -91,6 +91,12 @@ class HashChain:
         self.chain: list[AuditBlock] = []
         self._create_genesis_block()
 
+    @property
+    def height(self) -> int:
+        """Return the total number of blocks in the audit chain."""
+        with self._lock:
+            return len(self.chain)
+
     def _create_genesis_block(self) -> AuditBlock:
         """Generate and append the foundational genesis block.
 
