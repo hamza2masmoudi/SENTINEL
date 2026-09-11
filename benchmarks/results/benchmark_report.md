@@ -12,6 +12,10 @@ Total duration: 18.42s
 | anomaly | 0.8723 | 0.8200 | 0.8454 | 1.67ms | 2.09ms | 2.94ms |
 | ensemble | 0.8790 | 0.8856 | 0.8823 | 1.17ms | 1.53ms | 2.10ms |
 
+## Evaluation Methodology
+
+Empirical metrics are calculated across independent evaluation suites using dedicated test generators. Classification statistics reflect default detector confidence thresholds.
+
 ## Limitations
 
 - Synthetic Dataset Scope: Benchmark datasets are generated with deterministic perturbation to evaluate edge cases; production distributions will differ.
