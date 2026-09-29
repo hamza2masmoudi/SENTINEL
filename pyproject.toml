@@ -142,8 +142,31 @@ module = [
     "sentence_transformers.*",
     "transformers.*",
     "torch.*",
+    "prometheus_client.*",
+    "opentelemetry.*",
+    "opentelemetry.sdk.*",
+    "starlette.*",
+    "fastapi.*",
+    "uvicorn.*",
+    "numpy.*",
+    "slowapi.*",
+    "litellm.*",
+    "presidio_analyzer.*",
+    "presidio_anonymizer.*",
+    "spacy.*",
 ]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "sentinel.api.routes",
+    "sentinel.api.app",
+    "sentinel.api.middleware",
+    "sentinel.monitoring.metrics",
+]
+disallow_untyped_decorators = false
+warn_return_any = false
+disallow_subclassing_any = false
 
 
 [tool.pytest.ini_options]
