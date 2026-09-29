@@ -39,12 +39,6 @@ def _get_ensemble() -> DetectionEnsemble:
 
     Returns:
         DetectionEnsemble: Shared ensemble instance.
-
-    Raises:
-        None
-
-    Examples:
-        >>> ensemble = _get_ensemble()
     """
     global _ensemble
     if _ensemble is None:
@@ -60,12 +54,6 @@ def _get_input_guard() -> InputGuard:
 
     Returns:
         InputGuard: Shared input guard instance.
-
-    Raises:
-        None
-
-    Examples:
-        >>> guard = _get_input_guard()
     """
     global _input_guard
     if _input_guard is None:
@@ -81,12 +69,6 @@ def _get_output_guard() -> OutputGuard:
 
     Returns:
         OutputGuard: Shared output guard instance.
-
-    Raises:
-        None
-
-    Examples:
-        >>> guard = _get_output_guard()
     """
     global _output_guard
     if _output_guard is None:
@@ -102,12 +84,6 @@ def _get_audit_logger() -> AuditLogger:
 
     Returns:
         AuditLogger: Shared audit logger instance.
-
-    Raises:
-        None
-
-    Examples:
-        >>> logger = _get_audit_logger()
     """
     global _audit_logger
     if _audit_logger is None:
@@ -123,12 +99,6 @@ def _get_policy_engine() -> PolicyEngine:
 
     Returns:
         PolicyEngine: Shared policy engine instance.
-
-    Raises:
-        None
-
-    Examples:
-        >>> engine = _get_policy_engine()
     """
     global _policy_engine
     if _policy_engine is None:
@@ -141,15 +111,6 @@ def reset_route_singletons() -> None:
 
     Args:
         None
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> reset_route_singletons()
     """
     global _ensemble, _input_guard, _output_guard, _audit_logger, _policy_engine
     _ensemble = None
@@ -169,12 +130,6 @@ async def scan_text(payload: ScanRequest, request: Request) -> ScanResponse:
 
     Returns:
         ScanResponse: Detection results and threat assessment.
-
-    Raises:
-        None
-
-    Examples:
-        >>> pass
     """
     ensemble = _get_ensemble()
     result = await ensemble.analyze(payload.text, payload.context)
@@ -212,12 +167,6 @@ async def guard_input(payload: InputGuardRequest) -> InputGuardResponse:
 
     Returns:
         InputGuardResponse: Guardrail evaluation outcome.
-
-    Raises:
-        None
-
-    Examples:
-        >>> pass
     """
     guard = _get_input_guard()
     result = await guard.guard(payload.text, payload.context, payload.raise_on_block)
@@ -240,12 +189,6 @@ async def guard_output(payload: OutputGuardRequest) -> OutputGuardResponse:
 
     Returns:
         OutputGuardResponse: Guardrail evaluation outcome.
-
-    Raises:
-        None
-
-    Examples:
-        >>> pass
     """
     guard = _get_output_guard()
     result = await guard.guard(
@@ -274,12 +217,6 @@ async def query_audit(payload: AuditQueryRequest) -> AuditQueryResponse:
 
     Returns:
         AuditQueryResponse: Matching audit records.
-
-    Raises:
-        None
-
-    Examples:
-        >>> pass
     """
     audit_logger = _get_audit_logger()
     records = audit_logger.list_records(
@@ -320,12 +257,6 @@ async def evaluate_policy(
 
     Returns:
         PolicyEvaluationResponse: Compliance status and violations.
-
-    Raises:
-        None
-
-    Examples:
-        >>> pass
     """
     ensemble = _get_ensemble()
     ensemble_result = await ensemble.analyze(payload.text, payload.context)
@@ -364,12 +295,6 @@ async def health_check() -> HealthResponse:
 
     Returns:
         HealthResponse: System health payload.
-
-    Raises:
-        None
-
-    Examples:
-        >>> pass
     """
     from sentinel import __version__
 

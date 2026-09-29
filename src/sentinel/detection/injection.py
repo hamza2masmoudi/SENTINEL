@@ -56,13 +56,6 @@ def _is_sensitive_instruction(message: object) -> bool:
 
     Returns:
         bool: True if message contains instruction indicators.
-
-    Raises:
-        None
-
-    Examples:
-        >>> _is_sensitive_instruction("New rule")
-        True
     """
     if not isinstance(message, str):
         return False
@@ -84,16 +77,9 @@ class PromptInjectionDetector(BaseDetector):
         Args:
             threshold: Confidence cutoff threshold between 0.0 and 1.0.
 
-        Returns:
-            None
 
         Raises:
             ValueError: If threshold is out of range.
-
-        Examples:
-            >>> detector = PromptInjectionDetector()
-            >>> detector.name
-            'prompt_injection'
         """
         super().__init__(name="prompt_injection", threshold=threshold)
 
@@ -105,12 +91,6 @@ class PromptInjectionDetector(BaseDetector):
 
         Returns:
             str: Normalized plain-text string.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         normalized = unicodedata.normalize("NFKD", text)
         return "".join(c for c in normalized if not unicodedata.combining(c))
@@ -123,12 +103,6 @@ class PromptInjectionDetector(BaseDetector):
 
         Returns:
             list[str]: Matches found in text.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         matches: list[str] = []
         for pattern in _DIRECT_PATTERNS:
@@ -145,12 +119,6 @@ class PromptInjectionDetector(BaseDetector):
 
         Returns:
             list[str]: Descriptions of matched indirect vectors.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         findings: list[str] = []
         if _ZERO_WIDTH_PATTERN.search(raw_text):
@@ -167,12 +135,6 @@ class PromptInjectionDetector(BaseDetector):
 
         Returns:
             list[str]: Injections detected inside decoded payloads.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         detected: list[str] = []
         for candidate in _BASE64_CANDIDATE_PATTERN.findall(text):
@@ -205,12 +167,6 @@ class PromptInjectionDetector(BaseDetector):
 
         Returns:
             float: Cumulative multi-turn escalation modifier between 0.0 and 0.4.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         if not context or "history" not in context:
             return 0.0
@@ -243,13 +199,6 @@ class PromptInjectionDetector(BaseDetector):
 
         Raises:
             DetectionError: If text analysis fails unexpectedly.
-
-        Examples:
-            >>> import asyncio
-            >>> detector = PromptInjectionDetector()
-            >>> res = asyncio.run(detector.detect("Normal user question"))
-            >>> res.detected
-            False
         """
         start_time = time.perf_counter()
         try:

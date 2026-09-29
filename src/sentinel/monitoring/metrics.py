@@ -45,15 +45,6 @@ def record_detection(detector: str, severity: str, category: str) -> None:
         detector: Name of the detector reporting a threat.
         severity: Severity level (e.g., 'low', 'medium', 'high', 'critical').
         category: Threat classification category.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> record_detection("injection", "high", "direct_injection")
     """
     DETECTIONS_TOTAL.labels(
         detector=detector, severity=severity, category=category
@@ -66,15 +57,6 @@ def record_block(reason: str, tenant_id: str = "default") -> None:
     Args:
         reason: Rule or policy cause for blocking.
         tenant_id: Identifier of the tenant triggering the block.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> record_block("policy_violation", "tenant-1")
     """
     BLOCKED_TOTAL.labels(reason=reason, tenant_id=tenant_id).inc()
 
@@ -85,15 +67,6 @@ def record_latency(stage: str, seconds: float) -> None:
     Args:
         stage: Pipeline stage name (e.g., 'ensemble', 'input_guard').
         seconds: Duration elapsed in seconds.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> record_latency("ensemble", 0.045)
     """
     LATENCY_SECONDS.labels(stage=stage).observe(seconds)
 
@@ -104,15 +77,6 @@ def record_risk_score(detector: str, score: float) -> None:
     Args:
         detector: Identifier of the reporting detector.
         score: Computed score between 0.0 and 1.0.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> record_risk_score("pii", 0.95)
     """
     RISK_SCORE.labels(detector=detector).set(score)
 
@@ -125,13 +89,5 @@ def generate_metrics_payload() -> bytes:
 
     Returns:
         bytes: Raw Prometheus text exposition bytes.
-
-    Raises:
-        None
-
-    Examples:
-        >>> payload = generate_metrics_payload()
-        >>> b"sentinel_detections_total" in payload
-        True
     """
     return generate_latest(_REGISTRY)

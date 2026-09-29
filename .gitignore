@@ -48,3 +48,4 @@ benchmarks/datasets/*.jsonl
 commit_plan.json
 rewrite_history.py
 sentinel_rewrite_builder.py
+.DS_Store

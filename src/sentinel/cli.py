@@ -32,14 +32,9 @@ def _version_callback(value: bool) -> None:
     Args:
         value: True when the --version flag is set.
 
-    Returns:
-        None
 
     Raises:
         typer.Exit: Always raised after printing version.
-
-    Examples:
-        >>> _version_callback(True)
     """
     if value:
         typer.echo(f"sentinel {__version__}")
@@ -57,15 +52,6 @@ def main(
 
     Args:
         version: Print version and exit when True.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> main(version=False)
     """
 
 
@@ -82,14 +68,9 @@ def scan(
         text: Input text string to analyze.
         output_json: Format output as machine-readable JSON.
 
-    Returns:
-        None
 
     Raises:
         typer.Exit: Exits with code 1 if threats are detected.
-
-    Examples:
-        >>> scan("Hello world")
     """
     ensemble = DetectionEnsemble()
     result = asyncio.run(ensemble.analyze(text))
@@ -136,15 +117,6 @@ def health() -> None:
 
     Args:
         None
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> health()
     """
     config = get_config()
     typer.echo(f"SENTINEL v{__version__}")
@@ -167,15 +139,6 @@ def config_show(
 
     Args:
         output_json: Format output as machine-readable JSON.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> config_show()
     """
     config = get_config()
     if output_json:
@@ -203,15 +166,6 @@ def serve(
         host: Network interface to bind to.
         port: TCP port number to listen on.
         reload: Enable hot-reload for development.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> pass
     """
     try:
         import uvicorn
@@ -249,15 +203,6 @@ def audit_list(
         tenant_id: Optional tenant identifier filter.
         limit: Maximum number of records to display.
         output_json: Format output as machine-readable JSON.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> audit_list()
     """
     logger = AuditLogger()
     records = logger.list_records(tenant_id=tenant_id, limit=limit)
@@ -292,14 +237,9 @@ def audit_verify() -> None:
     Args:
         None
 
-    Returns:
-        None
 
     Raises:
         typer.Exit: Exits with code 1 if integrity verification fails.
-
-    Examples:
-        >>> audit_verify()
     """
     logger = AuditLogger()
     try:

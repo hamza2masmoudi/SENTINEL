@@ -52,13 +52,6 @@ def _calculate_shannon_entropy(candidate: str) -> float:
 
     Returns:
         float: Entropy value in bits.
-
-    Raises:
-        None
-
-    Examples:
-        >>> _calculate_shannon_entropy("aaaaaa")
-        0.0
     """
     if not candidate:
         return 0.0
@@ -85,16 +78,9 @@ class SecretsDetector(BaseDetector):
         Args:
             threshold: Confidence cutoff threshold between 0.0 and 1.0.
 
-        Returns:
-            None
 
         Raises:
             ValueError: If threshold is outside [0.0, 1.0].
-
-        Examples:
-            >>> detector = SecretsDetector()
-            >>> detector.name
-            'secrets'
         """
         super().__init__(name="secrets", threshold=threshold)
 
@@ -106,12 +92,6 @@ class SecretsDetector(BaseDetector):
 
         Returns:
             dict[str, list[str]]: Dictionary mapping secret types to match samples.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         matches: dict[str, list[str]] = {}
         for key_type, pattern in _SECRET_PATTERNS.items():
@@ -128,12 +108,6 @@ class SecretsDetector(BaseDetector):
 
         Returns:
             list[str]: High-entropy candidate tokens.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         candidates = re.findall(r"\b[A-Za-z0-9+/_-]{20,}\b", text)
         high_entropy_tokens: list[str] = []
@@ -156,13 +130,6 @@ class SecretsDetector(BaseDetector):
 
         Raises:
             DetectionError: If secret scanning crashes unexpectedly.
-
-        Examples:
-            >>> import asyncio
-            >>> detector = SecretsDetector()
-            >>> res = asyncio.run(detector.detect("System safe"))
-            >>> res.detected
-            False
         """
         start_time = time.perf_counter()
         try:

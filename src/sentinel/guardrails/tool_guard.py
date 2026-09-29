@@ -72,17 +72,6 @@ class ToolGuard:
         Args:
             allowed_tools: Whitelist of approved tool names.
             prohibited_tools: Blacklist of banned tool names.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> tg = ToolGuard()
-            >>> tg.allowed_tools is None
-            True
         """
         self.allowed_tools: list[str] | None = allowed_tools
         self.prohibited_tools: set[str] = (
@@ -97,12 +86,6 @@ class ToolGuard:
 
         Returns:
             tuple[bool, str]: (Threat detected, Category name).
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         for pattern in _DESTRUCTIVE_COMMANDS:
             if pattern.search(val_str):
@@ -128,12 +111,6 @@ class ToolGuard:
 
         Returns:
             tuple[bool, str, str | None]: (Has threat, Category, Reason).
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         for key, val in arguments.items():
             val_str = str(val)
@@ -160,12 +137,6 @@ class ToolGuard:
 
         Raises:
             PolicyViolationError: If blocked and raise_on_block is True.
-
-        Examples:
-            >>> tg = ToolGuard(allowed_tools=["calculator"])
-            >>> res = tg.validate_tool_call(ToolCall(tool_name="calculator"))
-            >>> res.allowed
-            True
         """
         name = tool_call.tool_name
 

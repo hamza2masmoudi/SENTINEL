@@ -25,17 +25,6 @@ class SentinelLangChainCallback:
             input_guard: Optional custom InputGuard instance.
             output_guard: Optional custom OutputGuard instance.
             raise_on_violation: Flag raising exceptions when threat is detected.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> handler = SentinelLangChainCallback()
-            >>> handler.raise_on_violation
-            True
         """
         self.input_guard: InputGuard = (
             input_guard if input_guard is not None else InputGuard()
@@ -59,15 +48,9 @@ class SentinelLangChainCallback:
             prompts: List of prompt strings dispatched to model.
             **kwargs: Additional contextual arguments.
 
-        Returns:
-            None
 
         Raises:
             PolicyViolationError: If a prompt is flagged and raise_on_violation is True.
-
-        Examples:
-            >>> handler = SentinelLangChainCallback()
-            >>> handler.on_llm_start({}, ["Hello"])
         """
         for prompt in prompts:
             res = self.input_guard.guard_sync(
@@ -82,15 +65,9 @@ class SentinelLangChainCallback:
             response: Response object containing generation generations.
             **kwargs: Additional contextual arguments.
 
-        Returns:
-            None
 
         Raises:
             PolicyViolationError: If generated content is blocked.
-
-        Examples:
-            >>> handler = SentinelLangChainCallback()
-            >>> handler.on_llm_end(None)
         """
         if response is None:
             return

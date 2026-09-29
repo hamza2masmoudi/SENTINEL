@@ -54,16 +54,9 @@ class AuditLogger:
         Args:
             database_path: SQLite path string (or ':memory:').
 
-        Returns:
-            None
 
         Raises:
             StorageError: If database initialization fails.
-
-        Examples:
-            >>> logger = AuditLogger()
-            >>> logger.database_path
-            ':memory:'
         """
         self.database_path: str = database_path
         self.hash_chain: HashChain = HashChain()
@@ -77,14 +70,9 @@ class AuditLogger:
         Args:
             None
 
-        Returns:
-            None
 
         Raises:
             StorageError: If schema creation encounters database errors.
-
-        Examples:
-            >>> pass
         """
         try:
             with self._lock:
@@ -137,12 +125,6 @@ class AuditLogger:
 
         Raises:
             StorageError: If database insertion fails.
-
-        Examples:
-            >>> logger = AuditLogger()
-            >>> rec = logger.record_interaction("r1", "Hello")
-            >>> rec.record_id
-            'r1'
         """
         with self._lock:
             meta = details if details is not None else {}
@@ -209,11 +191,6 @@ class AuditLogger:
 
         Raises:
             StorageError: If query execution fails.
-
-        Examples:
-            >>> logger = AuditLogger()
-            >>> len(logger.list_records())
-            0
         """
         with self._lock:
             try:
@@ -264,11 +241,6 @@ class AuditLogger:
 
         Raises:
             AuditIntegrityError: If chain hashes do not match.
-
-        Examples:
-            >>> logger = AuditLogger()
-            >>> logger.verify_integrity()
-            True
         """
         with self._lock:
             valid, _ = self.hash_chain.verify_integrity()
@@ -282,15 +254,6 @@ class AuditLogger:
 
         Returns:
             str: Comma-separated values document string.
-
-        Raises:
-            None
-
-        Examples:
-            >>> logger = AuditLogger()
-            >>> csv_data = logger.export_csv()
-            >>> "record_id" in csv_data
-            True
         """
         records = self.list_records(limit=10000)
         output = io.StringIO()

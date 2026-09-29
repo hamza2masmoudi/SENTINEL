@@ -66,17 +66,6 @@ class PolicyEngine:
 
         Args:
             None
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> pe = PolicyEngine()
-            >>> len(pe.policies)
-            0
         """
         self.policies: dict[str, Policy] = {}
 
@@ -91,13 +80,6 @@ class PolicyEngine:
 
         Raises:
             ValueError: If YAML structure or fields fail validation.
-
-        Examples:
-            >>> pe = PolicyEngine()
-            >>> y = "policy_id: p1\\nversion: 1.0\\nrules: []"
-            >>> p = pe.load_from_yaml(y)
-            >>> p.policy_id
-            'p1'
         """
         data = yaml.safe_load(yaml_content)
         if not isinstance(data, dict):
@@ -122,21 +104,6 @@ class PolicyEngine:
 
         Raises:
             KeyError: If policy_id is not registered.
-
-        Examples:
-            >>> pe = PolicyEngine()
-            >>> y = (
-            ...     "policy_id: p1\\n"
-            ...     "rules:\\n"
-            ...     "  - name: r1\\n"
-            ...     "    detector: injection\\n"
-            ...     "    min_score: 0.8\\n"
-            ...     "    action: block"
-            ... )
-            >>> _ = pe.load_from_yaml(y)
-            >>> action, rule = pe.evaluate("p1", {"injection": 0.85})
-            >>> action
-            'block'
         """
         policy = self.policies[policy_id]
         for rule in policy.rules:
@@ -162,12 +129,6 @@ class PolicyEngine:
 
         Returns:
             tuple[str, str | None]: Action and triggered rule name.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         for rule in rules:
             if rule.detector == "any":
@@ -190,17 +151,6 @@ class PolicyEngine:
 
         Returns:
             SimulationReport: Aggregated metric breakdown of policy actions.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pe = PolicyEngine()
-            >>> rule = PolicyRule(name="r", detector="any", min_score=0.5)
-            >>> pol = Policy(policy_id="test", rules=[rule])
-            >>> rep = pe.simulate(pol, [{"inj": 0.9}])
-            >>> rep.blocked_count
-            1
         """
         blocked = 0
         warned = 0

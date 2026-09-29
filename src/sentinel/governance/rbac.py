@@ -73,17 +73,6 @@ class RBACManager:
 
         Args:
             None
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> rbac = RBACManager()
-            >>> len(rbac.keys_by_id)
-            0
         """
         self.keys_by_id: dict[str, APIKeyRecord] = {}
         self.keys_by_hash: dict[str, str] = {}
@@ -97,12 +86,6 @@ class RBACManager:
 
         Returns:
             str: Hexadecimal hash digest.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
@@ -121,15 +104,6 @@ class RBACManager:
 
         Returns:
             tuple[str, APIKeyRecord]: Raw API key string and its stored record.
-
-        Raises:
-            None
-
-        Examples:
-            >>> rbac = RBACManager()
-            >>> raw_key, rec = rbac.create_api_key("acme", "admin")
-            >>> raw_key.startswith("snt_")
-            True
         """
         with self._lock:
             key_id = f"kid_{secrets.token_hex(8)}"
@@ -159,13 +133,6 @@ class RBACManager:
 
         Raises:
             AuthenticationError: If token is unknown, invalid, or revoked.
-
-        Examples:
-            >>> rbac = RBACManager()
-            >>> token, _ = rbac.create_api_key()
-            >>> rec = rbac.authenticate_key(token)
-            >>> rec.is_active
-            True
         """
         token_hash = self._hash_token(raw_token)
         with self._lock:
@@ -188,17 +155,6 @@ class RBACManager:
 
         Returns:
             bool: True if authorized, False otherwise.
-
-        Raises:
-            None
-
-        Examples:
-            >>> rbac = RBACManager()
-            >>> _, rec = rbac.create_api_key(role="readonly")
-            >>> rbac.authorize(rec, "guard")
-            False
-            >>> rbac.authorize(rec, "policies_read")
-            True
         """
         if required_permission in record.scopes:
             return True

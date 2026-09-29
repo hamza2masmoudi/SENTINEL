@@ -35,6 +35,16 @@ class EnsembleResult(BaseModel):
     explanation: str = Field(default="")
     total_latency_ms: float = Field(default=0.0, ge=0.0)
 
+    @property
+    def detected(self) -> bool:
+        """Indicate whether any threat was flagged or interaction was blocked."""
+        return self.blocked or len(self.triggered_detectors) > 0
+
+    @property
+    def score(self) -> float:
+        """Alias for composite_score."""
+        return self.composite_score
+
 
 class DetectionEnsemble:
     """Orchestrator executing detectors concurrently with weighted fusion.

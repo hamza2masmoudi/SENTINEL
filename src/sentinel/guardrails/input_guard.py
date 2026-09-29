@@ -27,6 +27,16 @@ class InputGuardResult(BaseModel):
     anonymization_mapping: dict[str, str] = Field(default_factory=dict)
     reason: str | None = Field(default=None)
 
+    @property
+    def sanitized_text(self) -> str:
+        """Alias for processed_text."""
+        return self.processed_text
+
+    @property
+    def threat_detected(self) -> bool:
+        """Indicate whether the input was halted as a threat."""
+        return self.blocked
+
 
 class InputGuard:
     """Pre-LLM guardrail enforcing threat detection and PII anonymization.
@@ -52,17 +62,6 @@ class InputGuard:
             pii_detector: Custom or default PIIDetector instance.
             anonymize_pii: Flag enabling reversible tokenization.
             bypass_tokens: Optional list of emergency bypass tokens.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> guard = InputGuard()
-            >>> guard.anonymize_pii
-            True
         """
         self.ensemble: DetectionEnsemble = (
             ensemble if ensemble is not None else DetectionEnsemble()
@@ -83,12 +82,6 @@ class InputGuard:
 
         Returns:
             bool: True if bypass is granted, False otherwise.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         if not self.bypass_tokens:
             return False
@@ -112,13 +105,6 @@ class InputGuard:
 
         Raises:
             PolicyViolationError: If blocked and raise_on_block is True.
-
-        Examples:
-            >>> import asyncio
-            >>> ig = InputGuard()
-            >>> res = asyncio.run(ig.guard("Hello"))
-            >>> res.allowed
-            True
         """
         if self._check_bypass(text):
             return InputGuardResult(
@@ -130,7 +116,8 @@ class InputGuard:
             )
 
         ensemble_res: EnsembleResult = await self.ensemble.analyze(text, context)
-        if ensemble_res.blocked:
+        only_pii = ensemble_res.triggered_detectors == ["pii"]
+        if ensemble_res.blocked and not (self.anonymize_pii and only_pii):
             if raise_on_block:
                 raise PolicyViolationError(
                     message=ensemble_res.explanation,
@@ -154,9 +141,9 @@ class InputGuard:
             allowed=True,
             processed_text=processed_text,
             blocked=False,
-            threat_score=ensemble_res.composite_score,
+            threat_score=0.0 if only_pii else ensemble_res.composite_score,
             anonymization_mapping=mapping,
-            reason=ensemble_res.explanation,
+            reason="PII anonymized" if only_pii else ensemble_res.explanation,
         )
 
     def guard_sync(
@@ -177,12 +164,6 @@ class InputGuard:
 
         Raises:
             PolicyViolationError: If blocked and raise_on_block is True.
-
-        Examples:
-            >>> ig = InputGuard()
-            >>> res = ig.guard_sync("Safe question")
-            >>> res.allowed
-            True
         """
         try:
             loop = asyncio.get_running_loop()
@@ -195,3 +176,6 @@ class InputGuard:
             )
             return future.result()
         return asyncio.run(self.guard(text, context, raise_on_block))
+
+    screen = guard
+    screen_sync = guard_sync

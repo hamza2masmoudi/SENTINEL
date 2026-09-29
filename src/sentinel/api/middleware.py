@@ -31,12 +31,6 @@ class CorrelationIdMiddleware(BaseHTTPMiddleware):
 
         Returns:
             Response: HTTP response with the correlation ID header attached.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         correlation_id: str = request.headers.get(self.HEADER_NAME, str(uuid.uuid4()))
         set_correlation_id(correlation_id)
@@ -63,15 +57,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         Args:
             app: ASGI application instance.
             requests_per_minute: Override for max requests per minute.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         super().__init__(app)
         config = get_config()
@@ -93,12 +78,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         Returns:
             Response: HTTP response or 429 rejection.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         client_ip: str = request.client.host if request.client else "unknown"
         now: float = time.time()
@@ -142,15 +121,6 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
         Args:
             app: ASGI application instance.
             admin_api_key: Override for the admin API key.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         super().__init__(app)
         config = get_config()
@@ -172,12 +142,6 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
 
         Returns:
             Response: HTTP response or 401/403 rejection.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         if request.url.path in self.PUBLIC_PATHS:
             return await call_next(request)

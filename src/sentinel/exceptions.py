@@ -16,17 +16,6 @@ class SentinelError(Exception):
         Args:
             message: Explanation of the error condition.
             details: Optional dictionary with diagnostic parameters.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = SentinelError("System initialization failed")
-            >>> str(err)
-            'System initialization failed'
         """
         super().__init__(message)
         self.message: str = message
@@ -40,14 +29,6 @@ class SentinelError(Exception):
 
         Returns:
             dict[str, Any]: Serialized representation of the error.
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = SentinelError("Failure", {"code": 500})
-            >>> err.to_dict()["message"]
-            'Failure'
         """
         return {
             "error_type": self.__class__.__name__,
@@ -70,17 +51,6 @@ class ConfigurationError(SentinelError):
         Args:
             message: Explanation of the invalid configuration.
             details: Contextual details such as the invalid field or value.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = ConfigurationError("Missing key", {"field": "api_key"})
-            >>> err.details["field"]
-            'api_key'
         """
         super().__init__(message, details)
 
@@ -106,17 +76,6 @@ class DetectionError(SentinelError):
             message: Failure explanation.
             detector_name: Identifier of the detector that failed.
             details: Contextual metadata for debugging.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = DetectionError("Inference failed", detector_name="inj")
-            >>> err.detector_name
-            'inj'
         """
         merged_details: dict[str, Any] = dict(details) if details is not None else {}
         merged_details["detector_name"] = detector_name
@@ -148,17 +107,6 @@ class PolicyViolationError(SentinelError):
             policy_name: Name of the policy that triggered.
             action_taken: Action executed (default: 'block').
             details: Additional diagnostic parameters.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = PolicyViolationError("PII denied", policy_name="no-pii")
-            >>> err.policy_name
-            'no-pii'
         """
         merged_details: dict[str, Any] = dict(details) if details is not None else {}
         merged_details["policy_name"] = policy_name
@@ -195,17 +143,6 @@ class AuditIntegrityError(SentinelError):
             expected_hash: Expected cryptographic digest.
             actual_hash: Computed cryptographic digest.
             details: Contextual details.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = AuditIntegrityError("Hash mismatch", record_id="rec-1")
-            >>> err.record_id
-            'rec-1'
         """
         merged_details: dict[str, Any] = dict(details) if details is not None else {}
         if record_id is not None:
@@ -244,17 +181,6 @@ class NetworkTimeoutError(SentinelError):
             service_name: Remote endpoint or service label.
             timeout_seconds: Timeout threshold configured in seconds.
             details: Diagnostic information.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = NetworkTimeoutError("Call timed out", "ollama", 5.0)
-            >>> err.service_name
-            'ollama'
         """
         merged_details: dict[str, Any] = dict(details) if details is not None else {}
         merged_details["service_name"] = service_name
@@ -285,17 +211,6 @@ class AuthenticationError(SentinelError):
             message: Failure explanation.
             identity: Requesting identity or key identifier.
             details: Diagnostic information.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = AuthenticationError("Invalid token", identity="c-42")
-            >>> err.identity
-            'c-42'
         """
         merged_details: dict[str, Any] = dict(details) if details is not None else {}
         merged_details["identity"] = identity
@@ -324,17 +239,6 @@ class RateLimitExceededError(SentinelError):
             message: Rate limit explanation.
             retry_after_seconds: Time to wait before retrying in seconds.
             details: Diagnostic rate limit values.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = RateLimitExceededError("Too fast", retry_after_seconds=30.0)
-            >>> err.retry_after_seconds
-            30.0
         """
         merged_details: dict[str, Any] = dict(details) if details is not None else {}
         merged_details["retry_after_seconds"] = retry_after_seconds
@@ -363,17 +267,6 @@ class StorageError(SentinelError):
             message: Failure explanation.
             backend: Storage engine involved.
             details: Diagnostic information.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> err = StorageError("Disk full", backend="sqlite")
-            >>> err.backend
-            'sqlite'
         """
         merged_details: dict[str, Any] = dict(details) if details is not None else {}
         merged_details["backend"] = backend

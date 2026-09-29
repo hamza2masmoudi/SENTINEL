@@ -18,6 +18,9 @@ _IBAN_REGEX = re.compile(r"\b[A-Z]{2}\d{2}[A-Z0-9]{4}\d{7}([A-Z0-9]?){0,16}\b")
 _FRENCH_NIR_REGEX = re.compile(
     r"\b[12]\s?\d{2}\s?(?:0[1-9]|1[0-2]|2[0-9])\s?\d{2}\s?\d{3}\s?\d{3}(?:\s?\d{2})?\b"
 )
+_US_SSN_REGEX = re.compile(
+    r"\b(?!000|666|9\d{2})\d{3}[- ](?!00)\d{2}[- ](?!0000)\d{4}\b"
+)
 _SIRET_REGEX = re.compile(r"\b\d{3}\s?\d{3}\s?\d{3}\s?\d{5}\b")
 _INTERNAL_URL_REGEX = re.compile(
     r"https?://(?:localhost|internal|corp|intranet|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|172\.(?:1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3})(?::\d+)?(?:/[^\s]*)?",
@@ -27,6 +30,7 @@ _INTERNAL_URL_REGEX = re.compile(
 _SENSITIVITY_WEIGHTS: dict[str, float] = {
     "credit_card": 0.95,
     "ssn_nir": 0.95,
+    "ssn": 0.95,
     "iban": 0.90,
     "siret": 0.75,
     "internal_url": 0.75,
@@ -44,13 +48,6 @@ def _verify_luhn(card_number_str: str) -> bool:
 
     Returns:
         bool: True if checksum is valid, False otherwise.
-
-    Raises:
-        None
-
-    Examples:
-        >>> _verify_luhn("49927398716")
-        True
     """
     digits = [int(c) for c in card_number_str if c.isdigit()]
     if len(digits) < 13:
@@ -80,16 +77,9 @@ class PIIDetector(BaseDetector):
         Args:
             threshold: Confidence cutoff threshold between 0.0 and 1.0.
 
-        Returns:
-            None
 
         Raises:
             ValueError: If threshold is outside [0.0, 1.0].
-
-        Examples:
-            >>> detector = PIIDetector()
-            >>> detector.name
-            'pii'
         """
         super().__init__(name="pii", threshold=threshold)
 
@@ -101,15 +91,6 @@ class PIIDetector(BaseDetector):
 
         Returns:
             dict[str, list[str]]: Mapping of entity types to list of matches.
-
-        Raises:
-            None
-
-        Examples:
-            >>> detector = PIIDetector()
-            >>> entities = detector.extract_entities("Contact test@example.com")
-            >>> "email" in entities
-            True
         """
         results: dict[str, list[str]] = {}
         patterns: list[tuple[str, re.Pattern[str]]] = [
@@ -117,6 +98,7 @@ class PIIDetector(BaseDetector):
             ("obfuscated_email", _OBFUSCATED_EMAIL_REGEX),
             ("phone", _PHONE_REGEX),
             ("ssn_nir", _FRENCH_NIR_REGEX),
+            ("ssn", _US_SSN_REGEX),
             ("siret", _SIRET_REGEX),
             ("internal_url", _INTERNAL_URL_REGEX),
         ]
@@ -144,15 +126,6 @@ class PIIDetector(BaseDetector):
 
         Returns:
             tuple[str, dict[str, str]]: Sanitized text and reverse mapping dictionary.
-
-        Raises:
-            None
-
-        Examples:
-            >>> detector = PIIDetector()
-            >>> anonymized, mapping = detector.anonymize("Call 0601020304 now")
-            >>> "0601020304" not in anonymized
-            True
         """
         entities = self.extract_entities(text)
         anonymized_text = text
@@ -178,15 +151,6 @@ class PIIDetector(BaseDetector):
 
         Returns:
             str: Original reconstructed text.
-
-        Raises:
-            None
-
-        Examples:
-            >>> detector = PIIDetector()
-            >>> text, mapping = detector.anonymize("Contact john@doe.com")
-            >>> detector.deanonymize(text, mapping)
-            'Contact john@doe.com'
         """
         restored = text
         for token, original in token_mapping.items():
@@ -207,13 +171,6 @@ class PIIDetector(BaseDetector):
 
         Raises:
             DetectionError: If PII scanning encounters an unexpected error.
-
-        Examples:
-            >>> import asyncio
-            >>> detector = PIIDetector()
-            >>> res = asyncio.run(detector.detect("Send money to test@example.com"))
-            >>> res.details["entity_counts"]["email"]
-            1
         """
         start_time = time.perf_counter()
         try:

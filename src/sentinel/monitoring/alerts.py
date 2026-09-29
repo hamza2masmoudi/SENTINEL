@@ -47,17 +47,6 @@ class AlertManager:
             webhook_url: Optional destination webhook URL.
             rate_limit_seconds: Cooldown duration for identical alert keys.
             timeout_seconds: Timeout threshold for webhook HTTP requests.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> manager = AlertManager()
-            >>> manager.rate_limit_seconds
-            30.0
         """
         self.webhook_url: str | None = webhook_url
         self.rate_limit_seconds: float = rate_limit_seconds
@@ -72,14 +61,6 @@ class AlertManager:
 
         Returns:
             bool: True if alert should be suppressed, False if allowed.
-
-        Raises:
-            None
-
-        Examples:
-            >>> manager = AlertManager(rate_limit_seconds=10.0)
-            >>> manager.should_suppress_alert("k1")
-            False
         """
         now = time.time()
         last_sent = self._last_alert_times.get(alert_key, 0.0)
@@ -103,9 +84,6 @@ class AlertManager:
 
         Raises:
             NetworkTimeoutError: If all retry attempts exceed timeout.
-
-        Examples:
-            >>> pass
         """
         backoff = 0.5
         for attempt in range(max_retries):
@@ -138,13 +116,6 @@ class AlertManager:
 
         Raises:
             NetworkTimeoutError: If webhook endpoint times out continuously.
-
-        Examples:
-            >>> import asyncio
-            >>> manager = AlertManager()
-            >>> alert = AlertPayload(severity="critical", title="Injection detected")
-            >>> asyncio.run(manager.send_alert(alert))
-            False
         """
         if self.webhook_url is None:
             return False

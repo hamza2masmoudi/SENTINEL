@@ -54,14 +54,6 @@ class SessionProfile(BaseModel):
 
         Returns:
             float: Estimated requests per minute.
-
-        Raises:
-            None
-
-        Examples:
-            >>> profile = SessionProfile(session_id="s1")
-            >>> profile.calculate_requests_per_minute()
-            0.0
         """
         elapsed_seconds = max(1.0, time.time() - self.created_at)
         return (self.total_requests / elapsed_seconds) * 60.0
@@ -79,17 +71,6 @@ class SessionManager:
 
         Args:
             None
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> sm = SessionManager()
-            >>> len(sm.sessions)
-            0
         """
         self.sessions: dict[str, SessionProfile] = {}
         self._lock = threading.RLock()
@@ -109,15 +90,6 @@ class SessionManager:
 
         Returns:
             SessionProfile: Retrieved or newly created session profile.
-
-        Raises:
-            None
-
-        Examples:
-            >>> sm = SessionManager()
-            >>> s = sm.get_or_create("s-42")
-            >>> s.session_id
-            's-42'
         """
         with self._lock:
             if session_id not in self.sessions:
@@ -147,15 +119,6 @@ class SessionManager:
 
         Returns:
             SessionProfile: Updated profile.
-
-        Raises:
-            None
-
-        Examples:
-            >>> sm = SessionManager()
-            >>> prof = sm.record_interaction("s1", "user", "Hello", 0.0)
-            >>> prof.total_requests
-            1
         """
         with self._lock:
             session = self.get_or_create(session_id)
@@ -179,15 +142,6 @@ class SessionManager:
 
         Returns:
             dict[str, Any]: Context dictionary containing history and rate metrics.
-
-        Raises:
-            None
-
-        Examples:
-            >>> sm = SessionManager()
-            >>> ctx = sm.get_context_dict("s1")
-            >>> "history" in ctx
-            True
         """
         with self._lock:
             session = self.get_or_create(session_id)

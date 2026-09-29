@@ -25,17 +25,6 @@ class _CompletionsWrapper:
             client: Underlying OpenAI client instance.
             input_guard: Pre-LLM input guardrail.
             output_guard: Post-LLM output guardrail.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> wrapper = _CompletionsWrapper(None, InputGuard(), OutputGuard())
-            >>> wrapper is not None
-            True
         """
         self.client: Any = client
         self.input_guard: InputGuard = input_guard
@@ -49,12 +38,6 @@ class _CompletionsWrapper:
 
         Returns:
             str: Latest user text or empty string.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         for msg in reversed(messages):
             if msg.get("role") == "user":
@@ -73,9 +56,6 @@ class _CompletionsWrapper:
 
         Raises:
             PolicyViolationError: If input prompt or generated response is blocked.
-
-        Examples:
-            >>> pass
         """
         prompt = self._extract_user_prompt(messages)
         if prompt:
@@ -128,17 +108,6 @@ class _ChatWrapper:
             client: Underlying client.
             input_guard: Input guardrail.
             output_guard: Output guardrail.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> chat = _ChatWrapper(None, InputGuard(), OutputGuard())
-            >>> chat.completions is not None
-            True
         """
         self.completions: _CompletionsWrapper = _CompletionsWrapper(
             client, input_guard, output_guard
@@ -164,17 +133,6 @@ class SentinelOpenAI:
             client: Optional underlying OpenAI client.
             input_guard: Custom InputGuard instance.
             output_guard: Custom OutputGuard instance.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> s_client = SentinelOpenAI()
-            >>> s_client.chat is not None
-            True
         """
         in_guard = input_guard if input_guard is not None else InputGuard()
         out_guard = output_guard if output_guard is not None else OutputGuard()

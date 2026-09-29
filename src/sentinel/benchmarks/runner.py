@@ -147,12 +147,6 @@ class BenchmarkRunner:
 
         Returns:
             DetectorMetrics: Performance metrics for the detector.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         predictions: list[bool] = []
         labels: list[bool] = []
@@ -177,16 +171,6 @@ class BenchmarkRunner:
 
         Returns:
             BenchmarkReport: Aggregate report with per-detector metrics.
-
-        Raises:
-            None
-
-        Examples:
-            >>> runner = BenchmarkRunner()
-            >>> import asyncio
-            >>> report = asyncio.run(runner.run_all([]))
-            >>> report.total_samples
-            0
         """
         start_time = time.perf_counter()
         all_metrics: list[DetectorMetrics] = []
@@ -211,15 +195,6 @@ class BenchmarkRunner:
 
         Returns:
             BenchmarkReport: Aggregate report with per-detector metrics.
-
-        Raises:
-            None
-
-        Examples:
-            >>> runner = BenchmarkRunner()
-            >>> report = runner.run_all_sync([])
-            >>> report.total_samples
-            0
         """
         return asyncio.run(self.run_all(samples))
 
@@ -236,9 +211,6 @@ class BenchmarkRunner:
 
         Raises:
             FileNotFoundError: If benchmark datasets are missing.
-
-        Examples:
-            >>> pass
         """
         from sentinel.benchmarks.datasets import load_dataset_jsonl
         from sentinel.detection import (
@@ -315,9 +287,6 @@ class BenchmarkRunner:
 
         Raises:
             FileNotFoundError: If benchmark datasets are missing.
-
-        Examples:
-            >>> pass
         """
         return asyncio.run(self.run_dedicated_suite(datasets_dir))
 

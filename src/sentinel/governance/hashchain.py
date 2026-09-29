@@ -46,14 +46,6 @@ class AuditBlock(BaseModel):
 
         Returns:
             str: Hexadecimal hash digest string.
-
-        Raises:
-            None
-
-        Examples:
-            >>> h = AuditBlock.calculate_hash(0, 1000.0, {"msg": "init"}, "0" * 64)
-            >>> len(h)
-            64
         """
         canonical_data = json.dumps(data, sort_keys=True)
         raw_payload = f"{index}:{timestamp}:{canonical_data}:{previous_hash}"
@@ -74,17 +66,6 @@ class HashChain:
 
         Args:
             algorithm: Cryptographic hashing algorithm name.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> hc = HashChain()
-            >>> len(hc.chain)
-            1
         """
         self.algorithm: str = algorithm
         self._lock = threading.RLock()
@@ -105,12 +86,6 @@ class HashChain:
 
         Returns:
             AuditBlock: The newly minted genesis block.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         genesis_time = 0.0
         genesis_data: dict[str, Any] = {"event": "genesis_block"}
@@ -136,15 +111,6 @@ class HashChain:
 
         Returns:
             AuditBlock: The newly committed block.
-
-        Raises:
-            None
-
-        Examples:
-            >>> hc = HashChain()
-            >>> blk = hc.add_block({"action": "blocked_injection"})
-            >>> blk.index
-            1
         """
         with self._lock:
             prev_block = self.chain[-1]
@@ -174,11 +140,6 @@ class HashChain:
 
         Raises:
             AuditIntegrityError: If chain tampering or corruption is discovered.
-
-        Examples:
-            >>> hc = HashChain()
-            >>> hc.verify_integrity()
-            (True, None)
         """
         with self._lock:
             for i in range(1, len(self.chain)):
@@ -218,15 +179,6 @@ class HashChain:
 
         Returns:
             list[dict[str, Any]]: List of block dictionary records.
-
-        Raises:
-            None
-
-        Examples:
-            >>> hc = HashChain()
-            >>> exported = hc.export_chain()
-            >>> len(exported)
-            1
         """
         with self._lock:
             return [b.model_dump() for b in self.chain]

@@ -54,17 +54,6 @@ class OutputGuard:
             toxicity_detector: Custom or default ToxicityDetector.
             pii_detector: Custom or default PIIDetector.
             enable_watermarking: Whether to embed invisible watermarks.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> og = OutputGuard()
-            >>> og.enable_watermarking
-            False
         """
         self.secrets_detector: SecretsDetector = (
             secrets_detector if secrets_detector is not None else SecretsDetector()
@@ -85,12 +74,6 @@ class OutputGuard:
 
         Returns:
             str: Watermarked text string.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         watermark_sequence = "\u200b\u200c\u200d"
         return f"{text}{watermark_sequence}"
@@ -115,13 +98,6 @@ class OutputGuard:
 
         Raises:
             PolicyViolationError: If leakage or toxicity triggers blocking.
-
-        Examples:
-            >>> import asyncio
-            >>> og = OutputGuard()
-            >>> res = asyncio.run(og.guard("Here is the answer."))
-            >>> res.allowed
-            True
         """
         sec_res = await self.secrets_detector.detect(text)
         if sec_res.detected:
@@ -191,12 +167,6 @@ class OutputGuard:
 
         Raises:
             PolicyViolationError: If blocked and raise_on_block is True.
-
-        Examples:
-            >>> og = OutputGuard()
-            >>> res = og.guard_sync("Valid text")
-            >>> res.allowed
-            True
         """
         try:
             loop = asyncio.get_running_loop()

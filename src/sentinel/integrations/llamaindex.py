@@ -24,17 +24,6 @@ class SentinelNodePostprocessor:
         Args:
             injection_detector: Optional custom PromptInjectionDetector.
             secrets_detector: Optional custom SecretsDetector.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> pp = SentinelNodePostprocessor()
-            >>> pp is not None
-            True
         """
         self.injection_detector: PromptInjectionDetector = (
             injection_detector
@@ -56,14 +45,6 @@ class SentinelNodePostprocessor:
 
         Returns:
             list[Any]: Filtered list of safe nodes.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pp = SentinelNodePostprocessor()
-            >>> pp.postprocess_nodes([])
-            []
         """
         safe_nodes: list[Any] = []
         for node_item in nodes:
@@ -101,17 +82,6 @@ class SentinelLlamaIndexHandler:
         Args:
             input_guard: Custom InputGuard instance.
             output_guard: Custom OutputGuard instance.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> handler = SentinelLlamaIndexHandler()
-            >>> handler is not None
-            True
         """
         self.input_guard: InputGuard = (
             input_guard if input_guard is not None else InputGuard()
@@ -129,16 +99,6 @@ class SentinelLlamaIndexHandler:
             event_type: LlamaIndex event label (such as 'query' or 'llm').
             payload: Event data dictionary.
             **kwargs: Extra parameters.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> handler = SentinelLlamaIndexHandler()
-            >>> handler.on_event_start("query", {"query_str": "Hello"})
         """
         if payload and "query_str" in payload:
             self.input_guard.guard_sync(str(payload["query_str"]))
@@ -152,16 +112,6 @@ class SentinelLlamaIndexHandler:
             event_type: LlamaIndex event label.
             payload: Event data dictionary.
             **kwargs: Extra parameters.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Examples:
-            >>> handler = SentinelLlamaIndexHandler()
-            >>> handler.on_event_end("llm", {"response": "Clean text"})
         """
         if payload and "response" in payload:
             self.output_guard.guard_sync(str(payload["response"]))

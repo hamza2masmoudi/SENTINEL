@@ -40,21 +40,9 @@ class BaseDetector(ABC):
             name: Identifier for the detector.
             threshold: Confidence threshold for threat detection.
 
-        Returns:
-            None
 
         Raises:
             ValueError: If threshold is not between 0.0 and 1.0.
-
-        Examples:
-            >>> class DummyDetector(BaseDetector):
-            ...     async def detect(self, text, context=None):
-            ...         return DetectionResult(
-            ...             detector_name=self.name, detected=False, score=0.0
-            ...         )
-            >>> d = DummyDetector("test")
-            >>> d.name
-            'test'
         """
         if not 0.0 <= threshold <= 1.0:
             raise ValueError("Threshold must be between 0.0 and 1.0")
@@ -70,12 +58,6 @@ class BaseDetector(ABC):
 
         Returns:
             str: Identifier of the detector.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         return self._name
 
@@ -88,12 +70,6 @@ class BaseDetector(ABC):
 
         Returns:
             float: Confidence cutoff threshold.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         return self._threshold
 
@@ -128,9 +104,6 @@ class BaseDetector(ABC):
 
         Raises:
             DetectionError: If detection encounters an unrecoverable failure.
-
-        Examples:
-            >>> pass
         """
         try:
             loop = asyncio.get_running_loop()

@@ -27,14 +27,6 @@ def configure_tracer(
 
     Returns:
         trace.Tracer: Configured tracer instance.
-
-    Raises:
-        None
-
-    Examples:
-        >>> tracer = configure_tracer("test-service")
-        >>> tracer is not None
-        True
     """
     global _INITIALIZED
     resource = Resource.create({"service.name": service_name})
@@ -56,14 +48,6 @@ def get_tracer(name: str = "sentinel") -> trace.Tracer:
 
     Returns:
         trace.Tracer: Active tracer instance.
-
-    Raises:
-        None
-
-    Examples:
-        >>> tracer = get_tracer("sentinel.eval")
-        >>> tracer is not None
-        True
     """
     return trace.get_tracer(name)
 
@@ -81,13 +65,6 @@ def trace_span(
 
     Returns:
         Generator[trace.Span, None, None]: Yields active span.
-
-    Raises:
-        None
-
-    Examples:
-        >>> with trace_span("test_step") as span:
-        ...     span.set_attribute("status", "ok")
     """
     tracer = get_tracer("sentinel")
     with tracer.start_as_current_span(name) as span:

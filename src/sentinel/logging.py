@@ -20,13 +20,6 @@ def get_correlation_id() -> str | None:
 
     Returns:
         str | None: The active correlation ID or None if not set.
-
-    Raises:
-        None
-
-    Examples:
-        >>> get_correlation_id() is None
-        True
     """
     return _CORRELATION_ID_VAR.get()
 
@@ -36,17 +29,6 @@ def set_correlation_id(correlation_id: str) -> None:
 
     Args:
         correlation_id: Unique request or trace correlation string.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> set_correlation_id("req-12345")
-        >>> get_correlation_id()
-        'req-12345'
     """
     _CORRELATION_ID_VAR.set(correlation_id)
 
@@ -56,18 +38,6 @@ def clear_correlation_id() -> None:
 
     Args:
         None
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> set_correlation_id("req-999")
-        >>> clear_correlation_id()
-        >>> get_correlation_id() is None
-        True
     """
     _CORRELATION_ID_VAR.set(None)
 
@@ -80,13 +50,6 @@ def get_tenant_id() -> str | None:
 
     Returns:
         str | None: The active tenant ID or None if unset.
-
-    Raises:
-        None
-
-    Examples:
-        >>> get_tenant_id() is None
-        True
     """
     return _TENANT_ID_VAR.get()
 
@@ -96,17 +59,6 @@ def set_tenant_id(tenant_id: str) -> None:
 
     Args:
         tenant_id: Multi-tenant client namespace identifier.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> set_tenant_id("tenant-acme")
-        >>> get_tenant_id()
-        'tenant-acme'
     """
     _TENANT_ID_VAR.set(tenant_id)
 
@@ -116,18 +68,6 @@ def clear_tenant_id() -> None:
 
     Args:
         None
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> set_tenant_id("tenant-xyz")
-        >>> clear_tenant_id()
-        >>> get_tenant_id() is None
-        True
     """
     _TENANT_ID_VAR.set(None)
 
@@ -146,14 +86,6 @@ def _context_processor(
 
     Returns:
         MutableMapping[str, Any]: Augmented event dictionary.
-
-    Raises:
-        None
-
-    Examples:
-        >>> payload = {}
-        >>> _context_processor(None, "info", payload)
-        {}
     """
     correlation_id = _CORRELATION_ID_VAR.get()
     if correlation_id is not None:
@@ -172,15 +104,6 @@ def configure_logging(level: str = "INFO", log_format: str = "json") -> None:
     Args:
         level: Logging level string (DEBUG, INFO, WARNING, ERROR).
         log_format: Desired log renderer (json or console).
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> configure_logging(level="INFO", log_format="json")
     """
     numeric_level = getattr(logging, level.upper(), logging.INFO)
     logging.basicConfig(format="%(message)s", stream=sys.stdout, level=numeric_level)
@@ -218,14 +141,6 @@ def get_logger(name: str = "sentinel") -> structlog.stdlib.BoundLogger:
 
     Returns:
         structlog.stdlib.BoundLogger: Bound structured logger instance.
-
-    Raises:
-        None
-
-    Examples:
-        >>> log = get_logger("sentinel.core")
-        >>> log is not None
-        True
     """
     logger: structlog.stdlib.BoundLogger = structlog.get_logger(name)
     return logger

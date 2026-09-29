@@ -130,14 +130,6 @@ def get_config() -> SentinelConfig:
 
     Returns:
         SentinelConfig: The active configuration instance.
-
-    Raises:
-        None
-
-    Examples:
-        >>> config = get_config()
-        >>> config.environment
-        'development'
     """
     global _GLOBAL_CONFIG
     if _GLOBAL_CONFIG is None:
@@ -152,17 +144,6 @@ def reset_config(new_config: SentinelConfig | None = None) -> None:
 
     Args:
         new_config: Optional new configuration instance to install.
-
-    Returns:
-        None
-
-    Raises:
-        None
-
-    Examples:
-        >>> reset_config(SentinelConfig(environment="production"))
-        >>> get_config().environment
-        'production'
     """
     global _GLOBAL_CONFIG
     with _GLOBAL_CONFIG_LOCK:

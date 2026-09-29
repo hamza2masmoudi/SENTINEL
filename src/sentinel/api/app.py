@@ -27,12 +27,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     Yields:
         None
-
-    Raises:
-        None
-
-    Examples:
-        >>> pass
     """
     yield
 
@@ -49,14 +43,6 @@ def create_app(
 
     Returns:
         FastAPI: Configured application with middleware, routes, and handlers.
-
-    Raises:
-        None
-
-    Examples:
-        >>> app = create_app()
-        >>> app.title
-        'SENTINEL API'
     """
     config = get_config()
 
@@ -97,12 +83,6 @@ def create_app(
 
         Returns:
             JSONResponse: Error detail response.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         return JSONResponse(
             status_code=403,
@@ -125,12 +105,6 @@ def create_app(
 
         Returns:
             JSONResponse: Error detail response.
-
-        Raises:
-            None
-
-        Examples:
-            >>> pass
         """
         return JSONResponse(
             status_code=500,

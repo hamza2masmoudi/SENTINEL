@@ -51,17 +51,6 @@ class ComplianceReport(BaseModel):
 
         Returns:
             str: Markdown formatted compliance report.
-
-        Raises:
-            None
-
-        Examples:
-            >>> rep = ComplianceReport(
-            ...     report_id="1", tenant_id="t", system_name="s",
-            ...     framework="gdpr", summary_score=100.0
-            ... )
-            >>> "Compliance Report" in rep.to_markdown()
-            True
         """
         lines = [
             f"# SENTINEL Compliance Report: {self.system_name}",
@@ -103,14 +92,6 @@ class ComplianceMapper:
 
         Returns:
             list[ComplianceCheckItem]: List of control evaluations.
-
-        Raises:
-            None
-
-        Examples:
-            >>> mapper = ComplianceMapper()
-            >>> len(mapper.evaluate_ai_act())
-            3
         """
         return [
             ComplianceCheckItem(
@@ -146,14 +127,6 @@ class ComplianceMapper:
 
         Returns:
             list[ComplianceCheckItem]: List of GDPR evaluations.
-
-        Raises:
-            None
-
-        Examples:
-            >>> mapper = ComplianceMapper()
-            >>> len(mapper.evaluate_gdpr())
-            2
         """
         return [
             ComplianceCheckItem(
@@ -183,14 +156,6 @@ class ComplianceMapper:
 
         Returns:
             list[ComplianceCheckItem]: List of SOC 2 evaluations.
-
-        Raises:
-            None
-
-        Examples:
-            >>> mapper = ComplianceMapper()
-            >>> len(mapper.evaluate_soc2())
-            2
         """
         return [
             ComplianceCheckItem(
@@ -222,15 +187,6 @@ class ComplianceMapper:
 
         Returns:
             ComplianceReport: Evaluated compliance report.
-
-        Raises:
-            None
-
-        Examples:
-            >>> mapper = ComplianceMapper()
-            >>> rep = mapper.generate_report("tenant-1", "AI-Bot", "ai_act")
-            >>> rep.summary_score
-            100.0
         """
         checks: list[ComplianceCheckItem] = []
         if framework in ("ai_act", "all"):
